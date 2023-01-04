@@ -1,4 +1,4 @@
-import { TextField } from "@mui/material";
+import { FormControl, MenuItem, Select, TextField } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { IPaginacao } from "../../interfaces/IPaginacao";
@@ -10,16 +10,19 @@ const ListaRestaurantes = () => {
   const [restaurantes, setRestaurantes] = useState<IRestaurante[]>([]);
   const [proximaPagina, setProximaPagina] = useState("");
   const [paginaAnterior, setpaginaAnterior] = useState("");
+  const [ordenar, setOrdenar] = useState("nenhum");
+  const [pesquisar, setPesquisar] = useState("");
 
   useEffect(() => {
     CarregarDados("http://localhost:8000/api/v1/restaurantes/");
-  }, []);
+  }, [ordenar, pesquisar]);
 
-  const CarregarDados = (url: string, busca?: string) => {
+  const CarregarDados = (url: string) => {
     axios
       .get<IPaginacao<IRestaurante>>(url, {
         params: {
-          search: busca,
+          search: pesquisar,
+          ordering: ordenar !== "nenhum" && ordenar,
         },
       })
       .then((resposta) => {
@@ -37,16 +40,28 @@ const ListaRestaurantes = () => {
       <h1>
         Os restaurantes mais <em>bacanas</em>!
       </h1>
-      <TextField
-        label="Pesquisar"
-        variant="outlined"
-        onChange={(evento) =>
-          CarregarDados(
-            "http://localhost:8000/api/v1/restaurantes/",
-            evento.target.value
-          )
-        }
-      />
+      <FormControl
+        fullWidth
+        sx={{ display: "flex", flexDirection: "row", gap: "20px" }}
+      >
+        <TextField
+          label="Pesquisar"
+          variant="outlined"
+          onChange={(evento) => setPesquisar(evento.target.value)}
+        />
+        <Select
+          value={ordenar}
+          onChange={(evento) => setOrdenar(evento.target.value)}
+          fullWidth
+          sx={{ maxWidth: "200px" }}
+        >
+          <MenuItem value={"nenhum"} selected>
+            Nenhum filtro
+          </MenuItem>
+          <MenuItem value={"nome"}>Nome</MenuItem>
+          <MenuItem value={"id"}>Id</MenuItem>
+        </Select>
+      </FormControl>
       {restaurantes?.map((item) => (
         <Restaurante restaurante={item} key={item.id} />
       ))}
