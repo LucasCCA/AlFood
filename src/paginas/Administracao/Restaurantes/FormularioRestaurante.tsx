@@ -12,6 +12,8 @@ const FormularioRestaurante = () => {
       http
         .get<IRestaurante>(`restaurantes/${parametros.id}/`)
         .then((resposta) => setNomeRestaurante(resposta.data.nome));
+    } else {
+      setNomeRestaurante("");
     }
   }, [parametros]);
 

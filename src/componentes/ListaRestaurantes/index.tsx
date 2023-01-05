@@ -40,20 +40,19 @@ const ListaRestaurantes = () => {
       <h1>
         Os restaurantes mais <em>bacanas</em>!
       </h1>
-      <FormControl
-        fullWidth
-        sx={{ display: "flex", flexDirection: "row", gap: "20px" }}
-      >
-        <TextField
-          label="Pesquisar"
-          variant="outlined"
-          onChange={(evento) => setPesquisar(evento.target.value)}
-        />
+      <TextField
+        sx={{ marginRight: "10px" }}
+        margin="dense"
+        label="Pesquisar"
+        variant="outlined"
+        onChange={(evento) => setPesquisar(evento.target.value)}
+      />
+      <FormControl margin="dense">
         <Select
           value={ordenar}
           onChange={(evento) => setOrdenar(evento.target.value)}
           fullWidth
-          sx={{ maxWidth: "200px" }}
+          sx={{ width: "210px" }}
         >
           <MenuItem value={"nenhum"} selected>
             Nenhum filtro
